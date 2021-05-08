@@ -53,15 +53,15 @@ elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    echo "It's working"
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
-   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo cryptsetup luksOpen /dev/sda3 cryptdata
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount $efivar /mnt/boot/efi
+   sudo mount /dev/sda1 /mnt/boot/efi
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
    sudo cp /etc/resolv.conf /mnt/etc/
    sudo chroot /mnt
-   echo "It's working"
+   zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
 
 elif [[ "$oschoice" = "Pop!_OS-on-NVMe" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
