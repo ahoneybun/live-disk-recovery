@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Intro
-zenity --info --title="Auto Mount Tool" --text="A tool to mount an installed OS from a live disk for repair or data recovery. Take a note of your drives and their mount points in the next window." --width=250 --height=100
+zenity --info --title="Auto Mount Tool" --text="A tool to mount an installed OS from a live disk for repair or data recovery. Take note of your drives and their mount points in the next window." --width=250 --height=100
 
 # Running 'apt update and apt upgrade'
 #zenity --password | sudo -Sk apt update
@@ -13,22 +13,8 @@ zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE
 # Ask which partition has the root partition
 rootvar=$(zenity --text="Enter the root partition, note this is usually the largest partition." --entry)
 
-# OS choice
-oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
-	--title="OS Choices" --column="Pick" --column="Choices" \
-	FALSE Ubuntu-on-SATA FALSE Ubuntu-on-NVMe FALSE Pop!_OS-on-SATA FALSE Pop!_OS-on-NVMe --separator=":")
-
-# Encrypted choice
-#encryptedchoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
-#   --title="Encrypted?" --column="Pick" --column="Choices" \
-#   FALSE Yes FALSE No TRUE None --separator=":")
-
-# Uses user input instead of a list. 
-#zenity --forms --title="Set installation information" \
-#   --text="Tell us about your installation" \
-#   --separator="," \
-#   --add-entry="Operating System" \
-#   --add-entry="Drive type" \
+# Ask which partition has the EFI partition
+efivar=$(zenity --text="Enter the EFI partition, note this is usually a 512MB partition." --entry)
 
 if [[ "$oschoice" = "Ubuntu-on-SATA" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
@@ -53,11 +39,11 @@ elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    echo "It's working"
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
-   sudo cryptsetup luksOpen $rootvar cryptdata # this assumes that the drive is sda
+   sudo cryptsetup luksOpen $rootvar cryptdata 
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount /dev/sda1 /mnt/boot/efi # this assumes that the drive is sda
+   sudo mount /dev/sda1 /mnt/boot/efi 
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
    sudo chown -R $USER /mnt/home/*
    nautilus /mnt/home/
