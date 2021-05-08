@@ -58,8 +58,6 @@ elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
    sudo mount /dev/sda1 /mnt/boot/efi # this assumes that the drive is sda
-   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
-   sudo cp /etc/resolv.conf /mnt/etc/
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
    cd /mnt/home
    nautilus .
