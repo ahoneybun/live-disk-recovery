@@ -1,22 +1,17 @@
 #!/bin/bash
 
 # Intro
-zenity --info --title="Auto Mount Tool" --text="A tool to mount an installed OS from a live disk for repair or data recovery." --width=250 --height=100
+zenity --info --title="Auto Mount Tool" --text="A tool to mount an installed OS from a live disk for repair or data recovery. Take a note of your drives and their mount points in the next window." --width=250 --height=100
 
 # Running 'apt update and apt upgrade'
 #zenity --password | sudo -Sk apt update
 #zenity --password | sudo -Sk apt upgrade -y
 
-# Note
-zenity --info --text="Take a note of your drives and their mount points in the next window." --width=250 --height=100
-
 # Listing drives and partitions
 zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE | grep -P "/dev/sd*|nvme*|vd")" --width=300 --height=50
 
 # Ask which partition has the root partition
-#zenity --forms --text="Which Partition is your root?" --add-entry="root partition" >> rootvar
-
-rootvar=$(zenity --entry)
+rootvar=$(zenity --text="Enter the root partition, note this is usually the largest partition." --entry)
 
 # OS choice
 oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
