@@ -13,6 +13,10 @@ zenity --info --text="Take a note of your drives and their mount points in the n
 # Listing drives and partitions
 zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE | grep -P "/dev/sd*|nvme*|vd")" --width=300 --height=50
 
+# Ask which partition has the root partition
+zenity --question --text="Which Partition is your root?"
+rootvar=$?
+
 # OS choice
 oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
 	--title="OS Choices" --column="Pick" --column="Choices" \
@@ -53,7 +57,7 @@ elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    echo "It's working"
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
-   sudo cryptsetup luksOpen /dev/sda3 cryptdata # this assumes that the drive is sda
+   sudo cryptsetup luksOpen $rootvar cryptdata # this assumes that the drive is sda
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
