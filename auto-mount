@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Intro
+zenity --info --title="Auto Mount Tool" --text="A tool to mount an installed OS from a live disk for repair or data recovery." --width=250 --height=100
+
+# Running 'apt update and apt upgrade'
+#zenity --password | sudo -Sk apt update
+#zenity --password | sudo -Sk apt upgrade -y
+
+# Note
+zenity --info --text="Take a note of your drives and their mount points in the next window." --width=250 --height=100
+
+# Listing drives and partitions
+zenity --info --title="Drives and Partitions" --text="$(lsblk -dpnoNAME | grep -P "/dev/sd|nvme|vd")" --width=150 --height=50
+
+# OS choice
+oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
+	--title="OS Choices" --column="Pick" --column="Choices" \
+	FALSE Ubuntu-on-SATA FALSE Ubuntu-on-NVMe FALSE Pop!_OS-on-SATA FALSE Pop!_OS-on-NVMe TRUE None --separator=":")
+
+# Encrypted choice
+#encryptedchoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
+#   --title="Encrypted?" --column="Pick" --column="Choices" \
+#   FALSE Yes FALSE No TRUE None --separator=":")
+
+# Uses user input instead of a list. 
+#zenity --forms --title="Set installation information" \
+#   --text="Tell us about your installation" \
+#   --separator="," \
+#   --add-entry="Operating System" \
+#   --add-entry="Drive type" \
+
+if [[ "$oschoice" = "Ubuntu-on-SATA" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   sudo mount $efivar /mnt/boot/efi
+   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+   sudo cp /etc/resolv.conf /mnt/etc/
+   sudo chroot /mnt
+   zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
+
+elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   sudo mount $efivar /mnt/boot/efi
+   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+   sudo cp /etc/resolv.conf /mnt/etc/
+   sudo chroot /mnt
+   echo "It's working"
+
+elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   sudo mount $efivar /mnt/boot/efi
+   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+   sudo cp /etc/resolv.conf /mnt/etc/
+   sudo chroot /mnt
+   echo "It's working"
+
+elif [[ "$oschoice" = "Pop!_OS-on-NVMe" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   sudo mount $efivar /mnt/boot/efi
+   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+   sudo cp /etc/resolv.conf /mnt/etc/
+   sudo chroot /mnt
+   echo "It's working"
+
+fi
+
