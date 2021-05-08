@@ -56,7 +56,7 @@ elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    echo "It's working"
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
-   sudo cryptsetup luksOpen /dev/sda3 cryptdata # this assumes that the drive is sda
+   sudo cryptsetup luksOpen $rootvar cryptdata # this assumes that the drive is sda
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
