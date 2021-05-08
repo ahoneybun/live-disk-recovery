@@ -16,7 +16,7 @@ zenity --info --title="Drives and Partitions" --text="$(lsblk -dpnoNAME | grep -
 # OS choice
 oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
 	--title="OS Choices" --column="Pick" --column="Choices" \
-	FALSE Ubuntu-on-SATA FALSE Ubuntu-on-NVMe FALSE Pop!_OS-on-SATA FALSE Pop!_OS-on-NVMe TRUE None --separator=":")
+	FALSE Ubuntu-on-SATA FALSE Ubuntu-on-NVMe FALSE Pop!_OS-on-SATA FALSE Pop!_OS-on-NVMe --separator=":")
 
 # Encrypted choice
 #encryptedchoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
@@ -39,7 +39,7 @@ if [[ "$oschoice" = "Ubuntu-on-SATA" ]]; then
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
    sudo cp /etc/resolv.conf /mnt/etc/
    sudo chroot /mnt
-   zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
+   #zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
 
 elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
@@ -61,7 +61,7 @@ elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
    sudo cp /etc/resolv.conf /mnt/etc/
    sudo chroot /mnt
-   zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
+   #zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
 
 elif [[ "$oschoice" = "Pop!_OS-on-NVMe" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
