@@ -14,7 +14,9 @@ zenity --info --text="Take a note of your drives and their mount points in the n
 zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE | grep -P "/dev/sd*|nvme*|vd")" --width=300 --height=50
 
 # Ask which partition has the root partition
-zenity --forms --text="Which Partition is your root?" --add-entry="root partition" >> rootvar
+#zenity --forms --text="Which Partition is your root?" --add-entry="root partition" >> rootvar
+
+rootvar=$(zenity --entry)
 
 # OS choice
 oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
