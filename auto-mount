@@ -14,7 +14,7 @@ zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE
 rootvar=$(zenity --text="Enter the root partition, note this is usually the largest partition." --entry)
 
 # Ask which partition has the EFI partition
-efivar=$(zenity --text="Enter the EFI partition, note this is usually a 512MB partition." --entry)
+#efivar=$(zenity --text="Enter the EFI partition, note this is usually a 512MB partition." --entry)
 
 # OS choice
 oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --checklist \
@@ -26,29 +26,27 @@ if [[ "$oschoice" = "Ubuntu-on-SATA" ]]; then
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount $efivar /mnt/boot/efi
-   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
-   sudo cp /etc/resolv.conf /mnt/etc/
-   sudo chroot /mnt
-   #zenity --info --text="Your Installed OS is now mounted and you are chrooted into it." --width=250 --height=100
+   #sudo mount /dev/sda1 /mnt/boot/efi 
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   nautilus admin:///mnt/home/
 
 elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount $efivar /mnt/boot/efi
-   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
-   sudo cp /etc/resolv.conf /mnt/etc/
-   sudo chroot /mnt
-   echo "It's working"
+   #sudo mount /dev/sda1 /mnt/boot/efi 
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   nautilus admin:///mnt/home/
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata 
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount /dev/sda1 /mnt/boot/efi 
+   #sudo mount /dev/sda1 /mnt/boot/efi 
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
    #sudo chown -R $USER /mnt/home/*
    nautilus admin:///mnt/home/
@@ -58,11 +56,9 @@ elif [[ "$oschoice" = "Pop!_OS-on-NVMe" ]]; then
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount $efivar /mnt/boot/efi
-   for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
-   sudo cp /etc/resolv.conf /mnt/etc/
-   sudo chroot /mnt
-   echo "It's working"
+   #sudo mount $efivar /mnt/boot/efi
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   nautilus admin:///mnt/home/
 
 fi
 
