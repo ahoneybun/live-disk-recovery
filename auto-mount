@@ -13,6 +13,9 @@ zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE
 # Ask which partition has the root partition
 rootvar=$(zenity --text="Enter the root partition, note this is usually the largest partition." --entry)
 
+# Ask if the drive is encrypted
+encrypted=$(zenity --text="Is your drive encrypted?" --entry)
+
 # Ask which partition has the EFI partition
 #efivar=$(zenity --text="Enter the EFI partition, note this is usually a 512MB partition." --entry)
 
@@ -42,6 +45,16 @@ elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
    nautilus admin:///mnt/home/
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata 
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   #sudo mount /dev/sda1 /mnt/boot/efi 
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   nautilus admin:///mnt/home/
+
+elif [[ "$oschoice" = "Pop!_OS-on-SATA" && "$encrypted" = "Yes" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata 
    sudo lvscan
    sudo vgchange -ay
