@@ -8,7 +8,7 @@ zenity --info --title="Auto Mount Tool" --text="A tool to mount an installed OS 
 #zenity --password | sudo -Sk apt upgrade -y
 
 # Listing drives and partitions
-zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,TYPE | grep -P "/dev/sd*|nvme*|vd")" --width=300 --height=50
+zenity --info --title="Drives and Partitions" --text="$(lsblk -pnoNAME,SIZE,FSTYPE,TYPE | grep -P "/dev/sd*|nvme*|vd")" --width=300 --height=50
 
 # Ask which partition has the root partition
 rootvar=$(zenity --text="Enter the root partition, note this is usually the largest partition." --entry)
