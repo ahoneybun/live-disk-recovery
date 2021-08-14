@@ -20,35 +20,49 @@ read -p 'What drive has your OS? ' drivevar
 
 read -p 'What is the root partition? ' rootvar
 
+read -p 'Is your drive encrypted? ' encryptvar
+
 # Read -p 'What is the EFI partition? ' efivar
 efivar=$(lsblk -if | grep EFI | awk -F- {'print$2'}  | awk {'print "/dev/"$1'})
-read -p 'Is your drive encrypted? ' encryptvar
+
+if [[  $encryptvar = yes ]]
+   then
+      sudo cryptsetup luksOpen $rootvar crypt-root
+      sudo lvscan
+      sudo vgchange -ay
+      sudo mount /dev/mapper/crypt-root /mnt
+      sudo mount $efivar /mnt/boot/efi
+      sudo cp /etc/resolv.conf /mnt/etc/
+      cd /mnt
+      sudo mount -t proc /proc proc/
+      sudo mount -t sysfs /sys sys/
+      sudo mount --rbind /dev dev/
+      sudo chroot /mnt /bin/bash
+elif [[ $encryptvar = no ]]
+   then 
+      sudo mount $rootvar /mnt
+      sudo mount $efivar /mnt/boot/efi
+      for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+      sudo cp /etc/resolv.conf /mnt/etc/
+      sudo chroot /mnt
+fi
 
 # Pop section
 
-if [[ $(grep PRETTY /etc/os-release | cut -c 13-) = *"Pop"* ]]; then
+if [[ $(grep PRETTY /mnt/etc/os-release | cut -c 13-) = *"Pop"* ]]; then
    echo "Pop!_OS detected"
-​
-## Run Pop!_OS bash script
-
-libs/pop.sh
+​     libs/pop.sh
 
 # Ubuntu section
 
-elif [[ $(grep PRETTY /etc/os-release | cut -c 13-) = *"Ubuntu"* ]]; then
+elif [[ $(grep PRETTY /mnt/etc/os-release | cut -c 13-) = *"Ubuntu"* ]]; then
    echo "Ubuntu detected"
-
-## Run Ubuntu bash script
-
-libs/ubuntu.sh
+      libs/ubuntu.sh
 
 # Arch section
 
-elif [[ $(grep PRETTY /etc/os-release | cut -c 13-) = *"Arch Linux"* ]]; then
-    echo "Arch detected"
-
-## Run the Arch bash script
-
-   lib/arch.sh
+elif [[ $(grep PRETTY /mnt/etc/os-release | cut -c 13-) = *"Arch Linux"* ]]; then
+   echo "Arch detected"
+      libs/arch.sh
 
 fi
