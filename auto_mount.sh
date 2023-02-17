@@ -18,6 +18,7 @@ echo ""
 
 read -p 'What drive has your OS? ' drivevar
 
+echo ""
 echo "NOTE: For Ubuntu is would be the 2nd and for Pop!_OS it would be the 3rd"
 
 read -p 'What is the root partition? ' rootvar
