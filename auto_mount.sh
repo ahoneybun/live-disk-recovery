@@ -147,6 +147,7 @@ if [[ $drivevar = nvme && $osvar = pop && $encryptvar = yes ]]
             sudo lvscan
             sudo vgchange -ay
             sudo mount /dev/mapper/nobara_localhost--live-root /mnt
+            sudo mount /dev/mapper/nobara_localhost--live-home /mnt/home
             sudo mount $efivar /mnt/boot/efi
             for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
             sudo cp /etc/resolv.conf /mnt/etc/
