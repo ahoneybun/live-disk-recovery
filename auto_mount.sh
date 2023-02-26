@@ -16,7 +16,7 @@ echo "--------------------------------------------------------------------------
 
 echo ""
 
-read -p 'What drive has your OS? ' drivevar
+read -p 'Which drive has your OS? ' drivevar
 
 echo ""
 echo "NOTE: For Ubuntu is would be the 2nd and for Pop!_OS it would be the 3rd"
@@ -95,6 +95,80 @@ if [[ $drivevar = nvme && $osvar = pop && $encryptvar = yes ]]
             sudo cp /etc/resolv.conf /mnt/etc/
             sudo chroot /mnt
     elif [[ $drivevar = sata && $osvar = ubuntu && $encryptvar = no ]]
+        then
+            sudo mount $rootvar /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+
+### Fedora section
+
+    elif [[ $drivevar = nvme && $osvar = fedora && $encryptvar = yes ]]
+        then
+            sudo cryptsetup luksOpen $rootvar cryptdata
+            sudo lvscan
+            sudo vgchange -ay
+            sudo mount /dev/mapper/vgubuntu-root /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+    elif [[ $drivevar = sata && $osvar = fedora && $encryptvar = yes ]]
+        then
+            sudo cryptsetup luksOpen /dev/$rootvar cryptdata
+            sudo lvscan
+            sudo vgchange -ay
+            sudo mount /dev/mapper/vgubuntu-root /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+    elif [[ $drivevar = nvme && $osvar = fedora && $encryptvar = no ]]
+        then
+            sudo mount $rootvar /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+    elif [[ $drivevar = sata && $osvar = fedora && $encryptvar = no ]]
+        then
+            sudo mount $rootvar /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+
+### Nobara section
+
+    elif [[ $drivevar = nvme && $osvar = nobara && $encryptvar = yes ]]
+        then
+            sudo cryptsetup luksOpen $rootvar cryptdata
+            sudo lvscan
+            sudo vgchange -ay
+            sudo mount /dev/mapper/nobara_localhost--live-root /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+    elif [[ $drivevar = sata && $osvar = nobara && $encryptvar = yes ]]
+        then
+            sudo cryptsetup luksOpen /dev/$rootvar cryptdata
+            sudo lvscan
+            sudo vgchange -ay
+            sudo mount /dev/mapper/nobara_localhost--live-root /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+    elif [[ $drivevar = nvme && $osvar = nobara && $encryptvar = no ]]
+        then
+            sudo mount $rootvar /mnt
+            sudo mount $efivar /mnt/boot/efi
+            for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
+            sudo cp /etc/resolv.conf /mnt/etc/
+            sudo chroot /mnt
+    elif [[ $drivevar = sata && $osvar = nobara && $encryptvar = no ]]
         then
             sudo mount $rootvar /mnt
             sudo mount $efivar /mnt/boot/efi
