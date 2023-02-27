@@ -24,35 +24,52 @@ oschoice=$(zenity --list --width=500 --height=250 --window-icon=question --check
 	--title="OS Choices" --column="Pick" --column="Choices" \
 	FALSE Ubuntu-on-SATA FALSE Ubuntu-on-NVMe FALSE Pop!_OS-on-SATA FALSE Pop!_OS-on-NVMe --separator=":")
 
+## Ubuntu section
+
 if [[ "$oschoice" = "Ubuntu-on-SATA" ]]; then
+   sudo mount $rootvar /mnt
+   #sudo mount /dev/sda1 /mnt/boot/efi 
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   xdg-open /mnt/home/
+
+elif [[ "$oschoice" = "Ubuntu-on-SATA" && "$encrypted" = "Yes" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   #sudo mount /dev/sda1 /mnt/boot/efi 
+   #sudo mount /dev/sda1 /mnt/boot/efi
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
    #sudo chown -R $USER /mnt/home/*
-   nautilus admin:///mnt/home/
+   xdg-open /mnt/home/
 
 elif [[ "$oschoice" = "Ubuntu-on-NVMe" ]]; then
+   sudo mount $rootvar /mnt
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   #sudo mount /dev/sda1 /mnt/boot/efi 
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   xdg-open /mnt/home/
+
+elif [[ "$oschoice" = "Ubuntu-on-NVMe" && "$encrypted" = "Yes" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   #sudo mount /dev/sda1 /mnt/boot/efi 
+   #sudo mount $efivar /mnt/boot/efi
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
-   #sudo chown -R $USER /mnt/home/*
-   nautilus admin:///mnt/home/
+   xdg-open /mnt/home/
+
+## Pop section
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" ]]; then
-   sudo cryptsetup luksOpen $rootvar cryptdata 
-   sudo lvscan
-   sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
    #sudo mount /dev/sda1 /mnt/boot/efi 
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
    #sudo chown -R $USER /mnt/home/*
-   nautilus admin:///mnt/home/
+   xdg-open /mnt/home/
 
 elif [[ "$oschoice" = "Pop!_OS-on-SATA" && "$encrypted" = "Yes" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata 
@@ -62,7 +79,7 @@ elif [[ "$oschoice" = "Pop!_OS-on-SATA" && "$encrypted" = "Yes" ]]; then
    #sudo mount /dev/sda1 /mnt/boot/efi 
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
    #sudo chown -R $USER /mnt/home/*
-   nautilus admin:///mnt/home/
+   xdg-open /mnt/home/
 
 elif [[ "$oschoice" = "Pop!_OS-on-NVMe" ]]; then
    sudo cryptsetup luksOpen $rootvar cryptdata
@@ -71,7 +88,50 @@ elif [[ "$oschoice" = "Pop!_OS-on-NVMe" ]]; then
    sudo mount /dev/mapper/data-root /mnt
    #sudo mount $efivar /mnt/boot/efi
    zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
-   nautilus admin:///mnt/home/
+   xdg-open /mnt/home/
+
+elif [[ "$oschoice" = "Pop!_OS-on-NVMe" && "$encrypted" = "Yes" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   #sudo mount $efivar /mnt/boot/efi
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   xdg-open /mnt/home/
+
+### Nobara section
+
+elif [[ "$oschoice" = "Nobara-on-SATA" ]]; then
+   sudo mount $rootvar /mnt
+   #sudo mount /dev/sda1 /mnt/boot/efi
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   xdg-open /mnt/home/
+
+elif [[ "$oschoice" = "Nobara-on-SATA" && "$encrypted" = "Yes" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/nobara_localhost--live-root /mnt
+   sudo mount /dev/mapper/nobara_localhost--live-home /mnt/home   #sudo mount /dev/sda1 /mnt/boot/efi
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   #sudo chown -R $USER /mnt/home/*
+   xdg-open /mnt/home/
+
+elif [[ "$oschoice" = "Nobara-on-NVMe" ]]; then
+   sudo mount $rootvar /mnt
+   #sudo mount $efivar /mnt/boot/efi
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   xdg-open /mnt/home/
+
+elif [[ "$oschoice" = "Nobara-on-NVMe" && "$encrypted" = "Yes" ]]; then
+   sudo cryptsetup luksOpen $rootvar cryptdata
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/data-root /mnt
+   #sudo mount $efivar /mnt/boot/efi
+   zenity --info --text="Your Installed OS is now mounted, opening the Files application." --width=450 --height=100
+   xdg-open /mnt/home/
 
 fi
 
