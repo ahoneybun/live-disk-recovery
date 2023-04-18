@@ -1,10 +1,8 @@
 # live-disk-recovery
 This is a bash/zenity script to make mounting an installed OS in a live disk easier to recover data.
 
-# Things working:
-- Pop!_OS on SATA
+## How to run it
 
-# Things not working:
-- Pop!_OS on NVMe
-- Ubuntu on SATA
-- Ubuntu on NVMe
+```bash
+sh <(curl -L https://github.com/ahoneybun/live-disk-recovery/auto_mount.sh)
+```
