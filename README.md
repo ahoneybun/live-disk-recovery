@@ -4,5 +4,5 @@ This is a bash/zenity script to make mounting an installed OS in a live disk eas
 ## How to run it
 
 ```bash
-sh <(curl -L https://github.com/ahoneybun/live-disk-recovery/auto_mount.sh)
+sh <(curl -L https://raw.githubusercontent.com/ahoneybun/live-disk-recovery/main/auto_mount.sh)
 ```
