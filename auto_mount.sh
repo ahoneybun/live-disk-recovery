@@ -4,20 +4,20 @@
 APPEND=""
 
 # Pop function
-pop_encrypt_fn () {
-   sudo cryptsetup luksOpen $rootvar cryptdata
+pop-encrypt-fn () {
+   sudo cryptsetup luksOpen $rootName cryptdata
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/data-root /mnt
-   sudo mount $efivar /mnt/boot/efi
+   sudo mount $efiName /mnt/boot/efi
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
    sudo cp /etc/resolv.conf /mnt/etc/
    sudo chroot /mnt
 }
 
 pop-fn () {
-   sudo mount $rootvar /mnt
-   sudo mount $efivar /mnt/boot/efi
+   sudo mount $rootName /mnt
+   sudo mount $efiName /mnt/boot/efi
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
    sudo cp /etc/resolv.conf /mnt/etc/
    sudo chroot /mnt
@@ -41,11 +41,11 @@ if [[ "$drivevar" == "/dev/nvme"* || "$drivevar" == "/dev/mmcblk0"* ]]; then
   APPEND="p"
 fi
 
-efiName=${driveName}$APPEND
+efiName=${drivevar}$APPEND
 efiName+=1
-rootName=${driveName}$APPEND
+rootName=${drivevar}$APPEND
 rootName+=3
-swapName=${driveName}$APPEND
+swapName=${drivevar}$APPEND
 swapName+=4
 
 read -p 'Is your drive encrypted? ' encryptvar
@@ -54,7 +54,7 @@ if [[ $distro = "Pop!_OS 22.04 LTS" || $encryptvar = yes ]]; then
    echo "I am Pop"
    echo "Your EFI partition is" $efiName
    echo "Your root partition is" $rootName
-   pop_encrypt_fn
+   pop-encrypt-fn
 fi
 ​
 # Ubuntu section
