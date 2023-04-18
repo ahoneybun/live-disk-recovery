@@ -48,7 +48,7 @@ rootName+=3
 swapName=${driveName}$APPEND
 swapName+=4
 
-read -p 'Is your drive encrypted?' encryptvar
+read -p 'Is your drive encrypted? ' encryptvar
 
 if [[ $distro = "Pop!_OS 22.04 LTS" || $encryptvar = yes ]]; then
    echo "I am Pop"
