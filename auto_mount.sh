@@ -4,7 +4,7 @@
 APPEND=""
 
 # Pop function
-pop-encrypt-fn () {
+function pop_encrypt_fn() {
    sudo cryptsetup luksOpen $rootName cryptdata
    sudo lvscan
    sudo vgchange -ay
@@ -15,7 +15,7 @@ pop-encrypt-fn () {
    sudo chroot /mnt
 }
 
-pop-fn () {
+function pop_fn() {
    sudo mount $rootName /mnt
    sudo mount $efiName /mnt/boot/efi
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
@@ -50,13 +50,18 @@ swapName+=4
 
 read -p 'Is your drive encrypted? ' encryptvar
 
-if [[ $distro = "Pop!_OS 22.04 LTS" || $encryptvar = yes ]]; then
+if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = yes ]]; then
    echo "I am Pop"
    echo "Your EFI partition is" $efiName
    echo "Your root partition is" $rootName
-   pop-encrypt-fn
+   pop_encrypt_fn
 fi
 ​
+if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = no ]]; then
+   echo "I am Pop"
+   echo "I am not encrypted"
+fi
+
 # Ubuntu section
 ## sudo mount /dev/mapper/vgubuntu-root /mnt
 
