@@ -15,7 +15,7 @@ pop_encrypt_fn () {
    sudo chroot /mnt
 }
 
-pop-_fn () {
+pop-fn () {
    sudo mount $rootvar /mnt
    sudo mount $efivar /mnt/boot/efi
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
