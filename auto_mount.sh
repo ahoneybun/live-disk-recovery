@@ -4,7 +4,7 @@
 APPEND=""
 
 # Pop function
-pop-encrypt-fn () {
+pop_encrypt_fn () {
    sudo cryptsetup luksOpen $rootvar cryptdata
    sudo lvscan
    sudo vgchange -ay
@@ -15,7 +15,7 @@ pop-encrypt-fn () {
    sudo chroot /mnt
 }
 
-pop-fn () {
+pop-_fn () {
    sudo mount $rootvar /mnt
    sudo mount $efivar /mnt/boot/efi
    for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
@@ -54,7 +54,7 @@ if [[ $distro = "Pop!_OS 22.04 LTS" || $encryptvar = yes ]]; then
    echo "I am Pop"
    echo "Your EFI partition is" $efiName
    echo "Your root partition is" $rootName
-   pop-encrypt-fn
+   pop_encrypt_fn
 fi
 ​
 # Ubuntu section
