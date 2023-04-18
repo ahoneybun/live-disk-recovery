@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Set append for drive automation
 APPEND=""
@@ -37,7 +37,7 @@ echo "--------------------------------------------------------------------------
 
 read -p 'Which drive has your OS? ' drivevar
 
-if [[ "$drivevar" == "/dev/nvme"* || "$drivevar" == "/dev/mmcblk0"* ]]; then
+if [[ "$drivevar" = "/dev/nvme"* || "$drivevar" = "/dev/mmcblk0"* ]]; then
   APPEND="p"
 fi
 
@@ -51,15 +51,14 @@ swapName+=4
 read -p 'Is your drive encrypted? ' encryptvar
 
 if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = yes ]]; then
-   echo "I am Pop"
+   echo "I am Pop and I'm encrypted"
    echo "Your EFI partition is" $efiName
    echo "Your root partition is" $rootName
    pop_encrypt_fn
 fi
 ​
 if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = no ]]; then
-   echo "I am Pop"
-   echo "I am not encrypted"
+   echo "I am Pop and I am not encrypted"
 fi
 
 # Ubuntu section
