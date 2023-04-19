@@ -23,6 +23,7 @@ pop-fn() {
    sudo chroot /mnt
 }
 
+# NixOS function
 nix-encrypt-fn() {
    sudo cryptsetup luksOpen $rootName crypt-root
    sudo lvscan
@@ -68,18 +69,16 @@ if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = yes ]]; then
    echo "I am Pop and I'm encrypted"
    echo "Your EFI partition is" $efiName
    echo "Your root partition is" $rootName
-   pop-encrypt-fn
-fi
-​
-if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = no ]]; then
-   echo "I am Pop and I am not encrypted"
-fi
+#   pop-encrypt-fn
 
-if [[ $distro = "NixOS 22.11 (Raccoon)" && $encryptvar = yes ]]; then
-   echo "I am Pop and I'm encrypted"
+elif [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = no ]]; then
+   echo "I am Pop and I am not encrypted"
+
+elif [[ $distro = "NixOS 22.11 (Raccoon)" && $encryptvar = yes ]]; then
+   echo "I am NixOS and I'm encrypted"
    echo "Your EFI partition is" $efiName
    echo "Your root partition is" $rootName
-   nix-encrypt-fn
+#   nix-encrypt-fn
 fi
 
 # Ubuntu section
