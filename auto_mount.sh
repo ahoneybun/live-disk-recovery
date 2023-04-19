@@ -29,7 +29,7 @@ nix-encrypt-fn() {
    sudo lvscan
    sudo vgchange -ay
    sudo mount /dev/mapper/lvm-root /mnt
-   sudo mount $efiName /mnt/@/boot/
+   sudo mount $efiName /mnt/@root/boot/
    sudo mount -o bind /dev /mnt/@root/dev
    sudo mount -o bind /proc /mnt/@root/proc
    sudo mount -o bind /sys /mnt/@root/sys
@@ -56,12 +56,9 @@ if [[ "$drivevar" = "/dev/nvme"* || "$drivevar" = "/dev/mmcblk0"* ]]; then
   APPEND="p"
 fi
 
-efiName=${drivevar}$APPEND
-efiName+=1
-rootName=${drivevar}$APPEND
-rootName+=3
-swapName=${drivevar}$APPEND
-swapName+=4
+efiName=${drivevar}${APPEND}1
+rootName=${drivevar}${APPEND}2
+swapName=${drivevar}${APPEND}4
 
 read -p 'Is your drive encrypted? ' encryptvar
 
