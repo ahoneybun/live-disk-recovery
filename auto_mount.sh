@@ -23,6 +23,20 @@ pop-fn() {
    sudo chroot /mnt
 }
 
+nix-encrypt-fn() {
+   sudo cryptsetup luksOpen $rootName crypt-root
+   sudo lvscan
+   sudo vgchange -ay
+   sudo mount /dev/mapper/lvm-root /mnt
+   sudo mount $efiName /mnt/@/boot/
+   sudo mount -o bind /dev /mnt/@root/dev
+   sudo mount -o bind /proc /mnt/@root/proc
+   sudo mount -o bind /sys /mnt/@root/sys
+   sudo cp /etc/resolv.conf /mnt/@root/etc/
+   sudo chroot /mnt/@root /nix/var/nix/profiles/system/activate
+   sudo chroot /mnt/@root /run/current-system/sw/bin/bash
+}
+
 clear
 echo "-------------------------------------------------------------------------------"
 echo " A tool to mount an installed OS from a live disk for repair or data recovery |" 
