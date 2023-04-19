@@ -75,6 +75,13 @@ if [[ $distro = "Pop!_OS 22.04 LTS" && $encryptvar = no ]]; then
    echo "I am Pop and I am not encrypted"
 fi
 
+if [[ $distro = "NixOS 22.11 (Raccoon)" && $encryptvar = yes ]]; then
+   echo "I am Pop and I'm encrypted"
+   echo "Your EFI partition is" $efiName
+   echo "Your root partition is" $rootName
+   nix-encrypt-fn
+fi
+
 # Ubuntu section
 ## sudo mount /dev/mapper/vgubuntu-root /mnt
 
